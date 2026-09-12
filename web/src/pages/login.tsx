@@ -3,15 +3,29 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 
+// Dummy credentials
+const DUMMY_CREDENTIALS = {
+    email: "demo@denkare.com",
+    password: "demo123"
+}
+
 export default function LoginPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
     const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        console.log("Login attempt with:", email, password)
-        navigate("/dash")
+        setError("")
+        
+        // Validate dummy credentials
+        if (email === DUMMY_CREDENTIALS.email && password === DUMMY_CREDENTIALS.password) {
+            console.log("Login successful with dummy credentials")
+            navigate("/dash")
+        } else {
+            setError("Invalid credentials. Please use the demo credentials shown below.")
+        }
     }
 
     return (
@@ -20,8 +34,23 @@ export default function LoginPage() {
                 <div className="text-center">
                     <h2 className="mt-6 text-3xl font-bold text-white">Welcome back</h2>
                     <p className="mt-2 text-sm text-zinc-400">Please sign in to your account</p>
+                    
+                    {/* Demo Credentials Display */}
+                    <div className="mt-4 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg">
+                        <p className="text-xs text-zinc-500 mb-2">Demo Credentials:</p>
+                        <div className="text-sm text-zinc-300 space-y-1">
+                            <p><span className="text-zinc-500">Email:</span> demo@denkare.com</p>
+                            <p><span className="text-zinc-500">Password:</span> demo123</p>
+                        </div>
+                    </div>
                 </div>
                 <form className="mt-8 space-y-6">
+                    {error && (
+                        <div className="p-3 bg-red-900/20 border border-red-800 rounded-md">
+                            <p className="text-sm text-red-400">{error}</p>
+                        </div>
+                    )}
+                    
                     <div className="space-y-4 rounded-md">
                         <div>
                             <label htmlFor="email-address" className="sr-only">
@@ -59,7 +88,7 @@ export default function LoginPage() {
 
                     <div>
                         <Button
-                            type="button"
+                            type="submit"
                             onClick={handleSubmit}
                             className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-zinc-700 border border-transparent rounded-md group hover:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500"
                         >
